@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  mssql:
+    image: bitwarden/mssql:latest
+    container_name: bitwarden-mssql
+    restart: always
+    volumes:
+      - ./bwdata/mssql/data:/var/opt/mssql/data
+      - ./bwdata/mssql/backups:/var/opt/mssql/backups
+    env_file:
+      - ./bwdata/env/mssql.override.env
+
+  web:
+    image: bitwarden/web:latest
+    container_name: bitwarden-web
+    restart: always
+    volumes:
+      - ./bwdata/web:/etc/bitwarden/web
+
+  api:
+    image: bitwarden/api:latest
+    container_name: bitwarden-api
+    restart: always
+    volumes:
+      - ./bwdata/core:/etc/bitwarden/core
+    env_file:
+      - ./bwdata/env/global.override.env
+
+  identity:
+    image: bitwarden/identity:latest
+    container_name: bitwarden-identity
+    restart: always
+    volumes:
+      - ./bwdata/identity:/etc/bitwarden/identity
+    env_file:
+      - ./bwdata/env/global.override.env
+
+  nginx:
+    image: bitwarden/nginx:latest
+    container_name: bitwarden-nginx
+    restart: always
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - ./bwdata/nginx:/etc/bitwarden/nginx
+      - ./bwdata/ssl:/etc/bitwarden/ssl
