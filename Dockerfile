@@ -1,5 +1,11 @@
-# We use the 'latest' tag instead of the SHA to ensure we get the manifest with amd64 support
-FROM --platform=linux/amd64 ghcr.io/bitwarden/self-host:latest
+# Example Dockerfile to create a management node for Bitwarden
+FROM ubuntu:22.04
 
-# The standard self-host image typically listens on port 8080 or 80
-EXPOSE 8080
+RUN apt-get update && apt-get install -y curl docker.io docker-compose
+WORKDIR /opt/bitwarden
+
+# Download the management script
+RUN curl -Lso bitwarden.sh https://go.btwrdn.co/bw-sh && chmod +x bitwarden.sh
+
+# The script is interactive, so further steps are usually handled at runtime
+ENTRYPOINT ["./bitwarden.sh"]
