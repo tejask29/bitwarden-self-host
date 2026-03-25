@@ -1,48 +1,23 @@
-version: '3'
+version: '3.8'
 
 services:
-  mssql:
-    image: bitwarden/mssql:latest
-    container_name: bitwarden-mssql
-    restart: always
+  # The Setup/Admin container
+  bitwarden-setup:
+    image: bitwarden/setup:latest
+    container_name: bitwarden-setup
+    user: "1001:1001" # Replace with the actual UID/GID of your bitwarden user
     volumes:
-      - ./bwdata/mssql/data:/var/opt/mssql/data
-      - ./bwdata/mssql/backups:/var/opt/mssql/backups
-    env_file:
-      - ./bwdata/env/mssql.override.env
-
-  web:
-    image: bitwarden/web:latest
-    container_name: bitwarden-web
-    restart: always
-    volumes:
-      - ./bwdata/web:/etc/bitwarden/web
-
-  api:
-    image: bitwarden/api:latest
-    container_name: bitwarden-api
-    restart: always
-    volumes:
-      - ./bwdata/core:/etc/bitwarden/core
+      - /opt/bitwarden/bwdata:/etc/bitwarden
     env_file:
       - ./bwdata/env/global.override.env
 
+  # Example service (Identity)
   identity:
     image: bitwarden/identity:latest
     container_name: bitwarden-identity
     restart: always
+    user: "1001:1001"
     volumes:
-      - ./bwdata/identity:/etc/bitwarden/identity
+      - /opt/bitwarden/bwdata/identity:/etc/bitwarden/identity
     env_file:
-      - ./bwdata/env/global.override.env
-
-  nginx:
-    image: bitwarden/nginx:latest
-    container_name: bitwarden-nginx
-    restart: always
-    ports:
-      - "80:8080"
-      - "443:8443"
-    volumes:
-      - ./bwdata/nginx:/etc/bitwarden/nginx
-      - ./bwdata/ssl:/etc/bitwarden/ssl
+      - /opt/bitwarden/bwdata/env/global.override.env
