@@ -21,7 +21,7 @@ RUN mkdir -p /opt/bitwarden && chown bitwarden:bitwarden /opt/bitwarden
 # 3. Download the official Bitwarden setup script as the bitwarden user
 USER bitwarden
 WORKDIR /opt/bitwarden
-RUN curl -Lso bitwarden.sh https://go.btwrdn.co/bw-sh && chmod +x bitwarden.sh
+RUN curl -Lso bitwarden.sh "https://func.bitwarden.com/api/dl/?app=self-host&platform=linux" && chmod 700 bitwarden.sh && chmod +x bitwarden.sh
 
 # Expose container HTTP port
 EXPOSE 8080
