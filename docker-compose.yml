@@ -1,23 +1,37 @@
 version: '3.8'
 
 services:
-  # The Setup/Admin container
-  bitwarden-setup:
-    image: bitwarden/setup:latest
-    container_name: bitwarden-setup
-    user: "1001:1001" # Replace with the actual UID/GID of your bitwarden user
-    volumes:
-      - /opt/bitwarden/bwdata:/etc/bitwarden
-    env_file:
-      - ./bwdata/env/global.override.env
+  # 1. Official Bitwarden Web Vault Frontend
+  web:
+    image: bitwarden/web:latest
+    container_name: bitwarden-web
+    restart: always
+    ports:
+      - "${PORT:-80}:80"
+    environment:
+      - globalSettings__baseServiceUri__vault=http://localhost
 
-  # Example service (Identity)
+  # 2. Official Bitwarden API Backend
+  api:
+    image: bitwarden/api:latest
+    container_name: bitwarden-api
+    restart: always
+    environment:
+      - globalSettings__selfHosted=true
+      - globalSettings__baseServiceUri__vault=http://localhost
+    volumes:
+      - bwdata:/etc/bitwarden
+
+  # 3. Official Bitwarden Identity Service
   identity:
     image: bitwarden/identity:latest
     container_name: bitwarden-identity
     restart: always
-    user: "1001:1001"
+    environment:
+      - globalSettings__selfHosted=true
+      - globalSettings__baseServiceUri__vault=http://localhost
     volumes:
-      - /opt/bitwarden/bwdata/identity:/etc/bitwarden/identity
-    env_file:
-      - /opt/bitwarden/bwdata/env/global.override.env
+      - bwdata:/etc/bitwarden
+
+volumes:
+  bwdata:
