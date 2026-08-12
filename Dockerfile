@@ -14,7 +14,7 @@ RUN groupadd -g 1000 bitwarden && \
     useradd -m -u 1000 -g bitwarden -s /bin/bash bitwarden
 
 # 2. Set up the application directory
-RUN mkdir -p /etc/bitwarden && chown bitwarden:bitwarden /opt/bitwarden
+RUN mkdir -p /etc/bitwarden && chown bitwarden:bitwarden /etc/bitwarden
 
 # 3. Download the official Bitwarden setup script as the bitwarden user
 USER bitwarden
