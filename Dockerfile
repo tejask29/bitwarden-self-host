@@ -14,15 +14,15 @@ RUN groupadd -g 1000 bitwarden && \
     useradd -m -u 1000 -g bitwarden -s /bin/bash bitwarden
 
 # 2. Set up the application directory
-RUN mkdir -p /opt/bitwarden && chown bitwarden:bitwarden /opt/bitwarden
+RUN mkdir -p /etc/bitwarden && chown bitwarden:bitwarden /opt/bitwarden
 
 # 3. Download the official Bitwarden setup script as the bitwarden user
 USER bitwarden
-WORKDIR /opt/bitwarden
+WORKDIR /etc/bitwarden
 RUN curl -Lso bitwarden.sh https://go.btwrdn.co/bw-sh && chmod +x bitwarden.sh
 
 # 4. Expose the volume for persistent data (bwdata)
-VOLUME /opt/bitwarden/bwdata
+VOLUME /etc/bitwarden/bwdata
 
 # This container acts as a wrapper for the bitwarden management script
 ENTRYPOINT ["./bitwarden.sh"]
