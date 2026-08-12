@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  bitwarden:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - BW_DB_PROVIDER=postgresql
+      - BW_DB_SERVER=postgres
+      - BW_DB_PORT=5432
+      - BW_DB_DATABASE=${POSTGRES_DB:-bitwarden_vault}
+      - BW_DB_USER=${POSTGRES_USER:-bitwarden}
+      - BW_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - BW_DOMAIN=https://${RAILWAY_PUBLIC_DOMAIN}
+      - BW_INSTALLATION_ID=${BW_INSTALLATION_ID}
+      - BW_INSTALLATION_KEY=${BW_INSTALLATION_KEY}
+    depends_on:
+      - postgres
+    volumes:
+      - bitwarden-data:/etc/bitwarden
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bitwarden_vault}
+      POSTGRES_USER: ${POSTGRES_USER:-bitwarden}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  bitwarden-data:
+  postgres-data:
