@@ -27,4 +27,4 @@ RUN curl -Lso bitwarden.sh https://go.btwrdn.co/bw-sh && chmod +x bitwarden.sh
 EXPOSE 8080
 
 # 4. Use explicit bash execution with correct array comma formatting
-ENTRYPOINT ["/bin/bash", "./bitwarden.sh", "start"]
+ENTRYPOINT ["/bin/bash", "cd", "/opt/bitwarden", "./bitwarden.sh", "start"]
