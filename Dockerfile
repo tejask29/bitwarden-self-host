@@ -25,4 +25,4 @@ RUN curl -Lso bitwarden.sh https://go.btwrdn.co/bw-sh && chmod +x bitwarden.sh
 VOLUME /etc/bitwarden/bwdata
 
 # This container acts as a wrapper for the bitwarden management script
-ENTRYPOINT ["./bitwarden.sh"]
+ENTRYPOINT ["./bitwarden.sh" "start"]
