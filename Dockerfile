@@ -1,4 +1,4 @@
-FROM bitwarden/self-host:beta
+FROM bitwarden/self-host:latest
 
-# Expose internal service port
+# Expose HTTP port for Railway's routing
 EXPOSE 8080
